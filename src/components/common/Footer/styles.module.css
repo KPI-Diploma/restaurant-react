@@ -1,0 +1,30 @@
+.footer {
+    background-color: var(--footer-bg);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-color-light);
+}
+
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu ul li {
+    margin-bottom: 5px;
+}
+
+.cart {
+    text-align: right;
+}
+
+
+.cart__items {
+    list-style-type: none;
+    padding: 0;
+}
+
+.cart button {
+    margin-top: 10px;
+}
