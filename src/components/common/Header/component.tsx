@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useReduxSelect } from '@/redux/hooks.ts';
 import { selectCategories, selectRecommended } from '@/redux/slices/restaurant';
 import { createMenuOption } from '@/components/common/Header/helpers.ts';
+import { RestaurantPaths } from '@/routes';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const Header = () => {
           }
         </ul>
       </nav>
-      <button>Place Order</button>
+      <button onClick={() => navigate(RestaurantPaths.CART)}>Place Order</button>
     </header>
   );
 };

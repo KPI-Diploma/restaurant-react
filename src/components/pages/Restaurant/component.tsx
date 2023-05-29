@@ -41,10 +41,12 @@ const Restaurant = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    ( async function () {
-      const recommendations = await getRecommendations(colors);
-      dispatch(setRecommendedDishes(recommendations));
-    } )();
+    if (colors.length > 0) {
+      ( async function () {
+        const recommendations = await getRecommendations(colors);
+        dispatch(setRecommendedDishes(recommendations));
+      } )();
+    }
   }, [dispatch, colors]);
 
   useEffect(() => {

@@ -4,15 +4,18 @@ import { selectCategories, selectRecommended } from '@/redux/slices/restaurant';
 import { useMemo } from 'react';
 import { createMenuOption } from '@/components/common/Header/helpers';
 import { useNavigate } from 'react-router-dom';
+import { selectCart } from '@/redux/slices/cart';
+import { RestaurantPaths } from '@/routes';
 
 const Footer = () => {
   const navigate = useNavigate();
   const categories = useReduxSelect(selectCategories);
   const recommended = useReduxSelect(selectRecommended);
+  const cart = useReduxSelect(selectCart);
   const navbarOptions = useMemo(() => {
     return [
-      ...(recommended.dishes.length > 0 ? [createMenuOption(recommended)] : []),
-      ...categories.map((category) => createMenuOption(category))
+      ...( recommended.dishes.length > 0 ? [createMenuOption(recommended)] : [] ),
+      ...categories.map((category) => createMenuOption(category)),
     ];
   }, [categories, recommended]);
 
@@ -33,11 +36,14 @@ const Footer = () => {
       <div className={ styles.cart }>
         <h3>Cart</h3>
         <ul className={ styles.cart__items }>
-          <li>Soup x1</li>
-          <li>Soup x2</li>
-          <li>Soup x3</li>
+          {
+            cart.map((item) => {
+              return <li key={ item.dish.uuid }>{ item.dish.name } x{ item.amount }</li>;
+            })
+          }
         </ul>
-        <button>Place Order</button>
+        { cart.length === 0 && <p>Nothing here yet :)</p> }
+        <button onClick={() => navigate(RestaurantPaths.CART)}>Place Order</button>
       </div>
     </footer>
   );

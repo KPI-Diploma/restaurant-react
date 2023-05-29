@@ -1,5 +1,4 @@
-import { Category } from '@/types/restaurant.ts';
-import { Dish } from '@/redux/slices/cart';
+import { Category, Dish } from '@/types/restaurant.ts';
 
 const baseURL = 'http://localhost:3000';
 

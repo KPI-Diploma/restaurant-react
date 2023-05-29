@@ -1,7 +1,7 @@
 import { CartState } from './types.ts';
 
 const initialState: CartState = {
-  dishes: [],
+  contents: [],
 };
 
 export default initialState;

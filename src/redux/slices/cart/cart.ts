@@ -1,20 +1,41 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import initialState from './initialState.ts';
-import { CartState, Dish } from './types.ts';
+import { CartItem } from './types.ts';
 import { RootState } from '../../store.ts';
+import { Dish } from '@/types/restaurant.ts';
+import { sortCartItems } from '@/redux/slices/cart/helpers.ts';
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
     addDishToCart: (state, action: PayloadAction<Dish>) => {
-      state.dishes = [...state.dishes, action.payload];
+      const target = state.contents.find(
+        (item) => item.dish.uuid === action.payload.uuid,
+      );
+      const newState = state.contents.filter(
+        (item) => item.dish.uuid !== action.payload.uuid,
+      );
+      if (target) {
+        target.amount += 1;
+        state.contents = sortCartItems([...newState, target]);
+      } else {
+        state.contents = sortCartItems([...newState, { dish: action.payload, amount: 1 }]);
+      }
     },
     removeDishFromCart: (state, action: PayloadAction<Dish>) => {
-      state.dishes = state.dishes.filter((dish) => dish.uuid !== action.payload.uuid);
-    },
-    clearCart: (state) => {
-      state.dishes = [];
+      const target = state.contents.find(
+        (item) => item.dish.uuid === action.payload.uuid,
+      );
+      const newState = state.contents.filter(
+        (item) => item.dish.uuid !== action.payload.uuid,
+      );
+      if (target && target.amount > 1) {
+        target.amount -= 1;
+        state.contents = sortCartItems([...newState, target]);
+      } else {
+        state.contents = sortCartItems([...newState]);
+      }
     },
   },
 });
@@ -22,7 +43,6 @@ const cartSlice = createSlice({
 export const {
   addDishToCart,
   removeDishFromCart,
-  clearCart,
 } = cartSlice.actions;
-export const selectCart = ({ cart }: RootState): CartState => cart;
+export const selectCart = ({ cart }: RootState): CartItem[] => cart.contents;
 export const cartReducer = cartSlice.reducer;

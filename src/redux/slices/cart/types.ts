@@ -1,9 +1,10 @@
-export interface Dish {
-  uuid: string;
-  image: string;
-  name: string;
-}
+import { Dish } from '@/types/restaurant.ts';
 
 export interface CartState {
-  dishes: Dish[];
+  contents: CartItem[];
+}
+
+export interface CartItem {
+  dish: Dish;
+  amount: number;
 }
