@@ -15,7 +15,11 @@ export async function getRecommendations(colors: string[]): Promise<Dish[]> {
   const response = await fetch(`${ baseURL }/recommendation`, {
     method: 'POST',
     cache: 'no-cache',
-    body: JSON.stringify(colors),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ colors }),
   });
   return await response.json() as Dish[];
 }

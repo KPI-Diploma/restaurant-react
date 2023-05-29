@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 const DefaultLayout = lazy(
   () => import('@/layouts/DefaultLayout/component'),
@@ -23,8 +23,9 @@ export enum CommonPaths {
   NOT_FOUND = '*',
 }
 
-export enum MenuPaths {
-  CATEGORY = '/categories',
+export enum RestaurantPaths {
+  RESTAURANT = '/restaurant',
+  CATEGORY = `${RESTAURANT}/categories`,
   IMAGE_SELECT = '/image-select'
 }
 
@@ -32,10 +33,11 @@ const AppRoutes = () => (
   <Suspense fallback={ <LoadingLayout/> }>
     <Routes>
       <Route element={ <DefaultLayout/> }>
-        <Route path={ CommonPaths.ROOT } element={ <Restaurant/> }/>
-        <Route path={ `${ MenuPaths.CATEGORY }/:category` } element={ <Restaurant/> }/>
-        <Route path={ MenuPaths.IMAGE_SELECT } element={ <ImageSelector/> }/>
+        <Route path={ CommonPaths.ROOT } element={ <Navigate to={RestaurantPaths.IMAGE_SELECT}/> }/>
+        <Route path={ RestaurantPaths.RESTAURANT } element={ <Restaurant/> }/>
+        <Route path={ `${ RestaurantPaths.CATEGORY }/:category` } element={ <Restaurant/> }/>
       </Route>
+      <Route path={ RestaurantPaths.IMAGE_SELECT } element={ <ImageSelector/> }/>
       <Route path={ CommonPaths.NOT_FOUND } element={ <Error/> }/>
       <Route path={ CommonPaths.ERROR } element={ <Error/> }/>
     </Routes>

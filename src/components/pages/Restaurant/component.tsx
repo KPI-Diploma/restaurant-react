@@ -1,23 +1,30 @@
 import styles from './styles.module.css';
 import { useParams } from 'react-router-dom';
 import { useReduxDispatch, useReduxSelect } from '@/redux/hooks.ts';
-import { selectCategories, selectColorChoices, setCategories, setRecommendedDishes } from '@/redux/slices/restaurant';
+import {
+  selectCategories,
+  selectColorChoices,
+  selectRecommended,
+  setCategories,
+  setRecommendedDishes,
+} from '@/redux/slices/restaurant';
 import React, { RefObject, useEffect, useMemo } from 'react';
 import { getCategories, getRecommendations } from '@/api';
 import { Category } from '@/types/restaurant';
-import DishComponent from '@/components/restaurant/Dish/component';
+import DishComponent from '@/components/pages/Restaurant/Dish/component';
 
 const Restaurant = () => {
   const dispatch = useReduxDispatch();
   const { category } = useParams();
   const categories = useReduxSelect(selectCategories);
+  const recommended = useReduxSelect(selectRecommended);
   const colors = useReduxSelect(selectColorChoices);
 
   const filteredCategories = useMemo(() => {
-    return categories.filter((category: Category) => {
+    return [recommended, ...categories].filter((category: Category) => {
       return category.dishes.length > 0;
     });
-  }, [categories]);
+  }, [categories, recommended]);
 
   const refs = useMemo(() => {
     return categories.reduce((acc: { [key: string]: RefObject<HTMLElement> }, value) => {

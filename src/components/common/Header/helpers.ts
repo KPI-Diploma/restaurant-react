@@ -1,5 +1,5 @@
 import { Category } from '@/types/restaurant.ts';
-import { MenuPaths } from '@/routes';
+import { RestaurantPaths } from '@/routes';
 
 interface NavbarOption {
   key: string;
@@ -11,6 +11,6 @@ export function createMenuOption(category: Category): NavbarOption {
   return {
     key: category.uuid,
     name: category.name,
-    url: `${ MenuPaths.CATEGORY }/${ category.uuid }`,
+    url: `${ RestaurantPaths.CATEGORY }/${ category.uuid }`,
   };
 }
