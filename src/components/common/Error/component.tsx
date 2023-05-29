@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 const Error = () => {
   return (
     <main className={ styles.error }>
-      Что-то пошло не так!
+      <h2>Something went wrong!</h2>
     </main>
   );
 };

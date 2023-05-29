@@ -2,15 +2,19 @@ import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.css';
 import { useMemo } from 'react';
 import { useReduxSelect } from '@/redux/hooks.ts';
-import { selectCategories } from '@/redux/slices/restaurant';
-import { createMenuOption, defaultNavbarOptions } from '@/components/common/Header/helpers.ts';
+import { selectCategories, selectRecommended } from '@/redux/slices/restaurant';
+import { createMenuOption } from '@/components/common/Header/helpers.ts';
 
 const Header = () => {
   const navigate = useNavigate();
   const categories = useReduxSelect(selectCategories);
+  const recommended = useReduxSelect(selectRecommended);
   const navbarOptions = useMemo(() => {
-    return [...defaultNavbarOptions, ...categories.map((category) => createMenuOption(category))];
-  }, [categories]);
+    return [
+      ...(recommended.dishes.length > 0 ? [createMenuOption(recommended)] : []),
+      ...categories.map((category) => createMenuOption(category))
+    ];
+  }, [categories, recommended]);
 
   return (
     <header className={ styles.header }>

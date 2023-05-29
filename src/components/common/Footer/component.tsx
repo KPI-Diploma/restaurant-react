@@ -1,15 +1,33 @@
 import styles from './styles.module.css';
+import { useReduxSelect } from '@/redux/hooks';
+import { selectCategories, selectRecommended } from '@/redux/slices/restaurant';
+import { useMemo } from 'react';
+import { createMenuOption } from '@/components/common/Header/helpers';
+import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
+  const navigate = useNavigate();
+  const categories = useReduxSelect(selectCategories);
+  const recommended = useReduxSelect(selectRecommended);
+  const navbarOptions = useMemo(() => {
+    return [
+      ...(recommended.dishes.length > 0 ? [createMenuOption(recommended)] : []),
+      ...categories.map((category) => createMenuOption(category))
+    ];
+  }, [categories, recommended]);
+
   return (
     <footer className={ styles.footer }>
       <div className={ styles.menu }>
         <h3>Menu</h3>
         <ul>
-          <li><a href="#">Appetizers</a></li>
-          <li><a href="#">Main Courses</a></li>
-          <li><a href="#">Desserts</a></li>
-          <li><a href="#">Beverages</a></li>
+          {
+            navbarOptions.map((option) =>
+              <li key={ option.key } onClick={ () => navigate(option.url) }>
+                { option.name }
+              </li>,
+            )
+          }
         </ul>
       </div>
       <div className={ styles.cart }>

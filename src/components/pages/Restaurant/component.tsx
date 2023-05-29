@@ -1,33 +1,62 @@
 import styles from './styles.module.css';
 import { useParams } from 'react-router-dom';
 import { useReduxDispatch, useReduxSelect } from '@/redux/hooks.ts';
-import { selectCategories, setCategories } from '@/redux/slices/restaurant';
-import { useEffect } from 'react';
-import { getCategories } from '@/api';
+import { selectCategories, selectColorChoices, setCategories, setRecommendedDishes } from '@/redux/slices/restaurant';
+import React, { RefObject, useEffect, useMemo } from 'react';
+import { getCategories, getRecommendations } from '@/api';
+import { Category } from '@/types/restaurant';
+import DishComponent from '@/components/restaurant/Dish/component';
 
 const Restaurant = () => {
   const dispatch = useReduxDispatch();
   const { category } = useParams();
   const categories = useReduxSelect(selectCategories);
+  const colors = useReduxSelect(selectColorChoices);
+
+  const filteredCategories = useMemo(() => {
+    return categories.filter((category: Category) => {
+      return category.dishes.length > 0;
+    });
+  }, [categories]);
+
+  const refs = useMemo(() => {
+    return categories.reduce((acc: { [key: string]: RefObject<HTMLElement> }, value) => {
+      acc[value.uuid] = React.createRef();
+      return acc;
+    }, {});
+  }, [categories]);
 
   useEffect(() => {
-    (async function () {
+    ( async function () {
       const categories = await getCategories();
       dispatch(setCategories(categories));
-    })();
-  }, []);
+    } )();
+  }, [dispatch]);
 
-  if (category) {
-    // todo: scroll to category
-  }
+  useEffect(() => {
+    ( async function () {
+      const recommendations = await getRecommendations(colors);
+      dispatch(setRecommendedDishes(recommendations));
+    } )();
+  }, [dispatch, colors]);
+
+  useEffect(() => {
+    if (category) {
+      refs[category]?.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }, [category, refs]);
+
   return (
     <main className={ styles.restaurant }>
-      { categories.map((category) =>
-        <span key={ category.uuid }>
-          { category.name }
-          <ul>
-            { category.dishes.map((dish) => <li key={ dish.uuid }>{ dish.name }</li>) }
-          </ul>
+      { filteredCategories.map((category) =>
+        <span key={ category.uuid } ref={ refs[category.uuid] }>
+          <h2 className={ styles.category }>{ category.name }</h2>
+          <div className={ styles.dishes }>
+            { category.dishes.map((dish) => <DishComponent key={ dish.uuid } dish={ dish }/>) }
+          </div>
         </span>)
       }
     </main>

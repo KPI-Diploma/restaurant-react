@@ -1,5 +1,6 @@
 export interface Dish {
   uuid: string;
+  image: string;
   name: string;
 }
 

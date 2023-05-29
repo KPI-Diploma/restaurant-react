@@ -1,32 +1,21 @@
 import { Category } from '@/types/restaurant.ts';
-import { v4 as uuidv4 } from 'uuid';
+import { Dish } from '@/redux/slices/cart';
+
+const baseURL = 'http://localhost:3000';
 
 export async function getCategories(): Promise<Category[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          uuid: uuidv4(),
-          name: 'Soups',
-          dishes: [
-            { uuid: uuidv4(), name: 'Borsht' },
-          ],
-        },
-        {
-          uuid: uuidv4(),
-          name: 'Pasta',
-          dishes: [
-            { uuid: uuidv4(), name: 'Bolognese' },
-          ],
-        },
-        {
-          uuid: uuidv4(),
-          name: 'Fish',
-          dishes: [
-            { uuid: uuidv4(), name: 'Salmon' },
-          ],
-        },
-      ]);
-    }, 2500);
+  const response = await fetch(`${ baseURL }/categories`, {
+    method: 'GET',
+    cache: 'no-cache',
   });
+  return await response.json() as Category[];
+}
+
+export async function getRecommendations(colors: string[]): Promise<Dish[]> {
+  const response = await fetch(`${ baseURL }/recommendation`, {
+    method: 'POST',
+    cache: 'no-cache',
+    body: JSON.stringify(colors),
+  });
+  return await response.json() as Dish[];
 }
