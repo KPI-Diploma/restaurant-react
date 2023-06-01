@@ -8,8 +8,8 @@ export function getRandomColors() {
 
   baseColors.forEach((color) => {
     const shades = [];
-    const startColor = chroma(color).saturate(1.5).brighten(1);
-    const endColor = chroma(color).saturate(0.5).darken(1);
+    const startColor = chroma(color).saturate(getRandomValue(1, 2)).brighten(getRandomValue(1, 3));
+    const endColor = chroma(color).saturate(getRandomValue(0, 1)).darken(getRandomValue(1, 3));
     const scale = chroma.scale([startColor, endColor]);
     for (let i = 0; i < 3; i++) {
       shades.push(scale(Math.random()).hex());
@@ -18,6 +18,10 @@ export function getRandomColors() {
   });
 
   return shuffle(colors);
+}
+
+function getRandomValue(from: number, to: number): number {
+  return Math.random() * (to - from) + from;
 }
 
 export function shuffle<T>(colors: T[]) {

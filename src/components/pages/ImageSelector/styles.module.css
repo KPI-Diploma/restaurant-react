@@ -11,12 +11,21 @@
 .gallery {
     width: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     column-gap: 20px;
-    overflow-x: auto;
+    row-gap: 20px;
+    max-height: 628px;
+    flex-wrap: wrap;
 }
 
 .gallery__image {
-    min-width: 300px;
+    width: 304px;
+    height: 304px;
+    border: 2px solid transparent;
+    transition: border .3s ease-in-out;
+}
+
+.gallery__image:hover {
+    border-color: var(--black);
 }
