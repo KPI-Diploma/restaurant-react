@@ -29,6 +29,7 @@
 .cartItem__image {
     height: 60px;
     border-radius: 4px;
+    min-width: 90px;
 }
 
 .cartItem__content {

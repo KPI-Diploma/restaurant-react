@@ -27,11 +27,11 @@ const Restaurant = () => {
   }, [categories, recommended]);
 
   const refs = useMemo(() => {
-    return categories.reduce((acc: { [key: string]: RefObject<HTMLElement> }, value) => {
+    return filteredCategories.reduce((acc: { [key: string]: RefObject<HTMLElement> }, value) => {
       acc[value.uuid] = React.createRef();
       return acc;
     }, {});
-  }, [categories]);
+  }, [filteredCategories]);
 
   useEffect(() => {
     ( async function () {
@@ -61,8 +61,9 @@ const Restaurant = () => {
   return (
     <main className={ styles.restaurant }>
       { filteredCategories.map((category) =>
-        <span key={ category.uuid } ref={ refs[category.uuid] }>
-          <h2 className={ styles.category }>{ category.name }</h2>
+        <span key={ category.uuid } className={styles.category}>
+          <span ref={ refs[category.uuid] } className={styles.anchor} />
+          <h2 className={ styles.categoryHeading }>{ category.name }</h2>
           <div className={ styles.dishes }>
             { category.dishes.map((dish) => <DishComponent key={ dish.uuid } dish={ dish }/>) }
           </div>

@@ -2,7 +2,7 @@
     padding: 20px;
 }
 
-.category {
+.categoryHeading {
     font-size: 36px;
     margin-bottom: 8px;
     font-weight: bold;
@@ -18,4 +18,14 @@
     max-width: 100%;
     overflow-x: auto;
     padding: 5px;
+}
+
+.category {
+    position: relative;
+}
+
+.anchor {
+    position: absolute;
+    top: calc(var(--header-height) * -1);
+    left: 0;
 }
